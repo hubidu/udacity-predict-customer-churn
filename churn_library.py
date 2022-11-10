@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, plot_roc_curve
 sns.set()
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
@@ -150,6 +150,7 @@ def classification_report_image(y_train,
              'fontsize': 10}, fontproperties='monospace')  # approach improved by OP -> monospace!
     plt.axis('off')
     plt.savefig('./images/results/classification_report_rf.png')
+    plt.close()
 
     plt.rc('figure', figsize=(5, 5))
     plt.text(0.01, 1.25, str('Logistic Regression Train'),
@@ -162,6 +163,7 @@ def classification_report_image(y_train,
              'fontsize': 10}, fontproperties='monospace')  # approach improved by OP -> monospace!
     plt.axis('off')
     plt.savefig('./images/results/classification_report_lr.png')
+    plt.close()
 
 
 def feature_importance_plot(model, x_data, output_pth):
@@ -198,6 +200,16 @@ def feature_importance_plot(model, x_data, output_pth):
     plt.xticks(range(x_data.shape[1]), names, rotation=90)
     plt.savefig(output_pth)
 
+def roc_plot(lrc, cv_rfc, x_test, y_test, output_pth):
+    lrc_plot = plot_roc_curve(lrc, x_test, y_test)
+
+    plt.figure(figsize=(15, 8))
+
+    ax = plt.gca()
+    plot_roc_curve(cv_rfc.best_estimator_, x_test, y_test, ax=ax, alpha=0.8)
+    lrc_plot.plot(ax=ax, alpha=0.8)
+
+    plt.savefig(output_pth)
 
 def train_models(x_train, x_test, y_train, y_test):
     '''
@@ -243,4 +255,6 @@ def train_models(x_train, x_test, y_train, y_test):
                                 y_test_preds_lr,
                                 y_test_preds_rf)
     feature_importance_plot(
-        cv_rfc, x_train.append(x_test), './images/results/feature_importance_plot.')
+        cv_rfc, x_train.append(x_test), './images/results/feature_importance_plot.png')
+
+    roc_plot(lrc, cv_rfc, x_test, y_test, './images/results/roc.png')
