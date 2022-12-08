@@ -27,7 +27,7 @@ Overview of the files and data present in the root directory.
 Install module dependencies
 
 ```bash
-   python3 -m install -f requirements_py3.8.txt
+   python3 -m pip install -r requirements_py3.8.txt
 ```
 
 You should also install autopep8

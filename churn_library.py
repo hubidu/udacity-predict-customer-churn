@@ -48,19 +48,23 @@ def perform_eda(dataframe):
         plt.figure(figsize=(20, 10))
         dataframe.hist(column_name)
         plt.savefig(f"./images/eda/{column_name}_hist.png")
+        plt.close()
 
     plt.figure(figsize=(20, 10))
     dataframe.Marital_Status.value_counts('normalize').plot(kind='bar')
     plt.savefig("./images/eda/Marital_Status_hist.png")
+    plt.close()
 
     plt.figure(figsize=(20, 10))
     sns.histplot(dataframe['Total_Trans_Ct'],
                  stat='density', kde=True).get_figure()
     plt.savefig("./images/eda/Total_TransCt_density.png")
+    plt.close()
 
     plt.figure(figsize=(20, 10))
     sns.heatmap(dataframe.corr(), annot=False, cmap='Dark2_r', linewidths=2)
     plt.savefig("./images/eda/Dark2_r_heat.png")
+    plt.close()
 
 
 def encoder_helper(dataframe, category_lst=None, response='Churn'):
@@ -199,6 +203,7 @@ def feature_importance_plot(model, x_data, output_pth):
     # Add feature names as x-axis labels
     plt.xticks(range(x_data.shape[1]), names, rotation=90)
     plt.savefig(output_pth)
+    plt.close()
 
 def roc_plot(lrc, cv_rfc, x_test, y_test, output_pth):
     lrc_plot = plot_roc_curve(lrc, x_test, y_test)
@@ -210,6 +215,7 @@ def roc_plot(lrc, cv_rfc, x_test, y_test, output_pth):
     lrc_plot.plot(ax=ax, alpha=0.8)
 
     plt.savefig(output_pth)
+    plt.close()
 
 def train_models(x_train, x_test, y_train, y_test):
     '''
